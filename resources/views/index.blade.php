@@ -10,8 +10,8 @@
 </head>
 <body>
   <nav class="navbar bg-dark text-light px-5 py-3  mb-5">
-    <a class="navbar-brand text-white" href="/produits">Gestion Products</a>
-    <a class="nav-link text-white btn btn-success" href="{{route('produits.create')}}">Create</a>
+    <a class="navbar-brand text-white" href="/product">Gestion Products</a>
+    <a class="nav-link text-white btn btn-success" href="{{route('product.create')}}">Create</a>
   </nav>
   @yield("content")
   <div class="bg-dark w-100 text-light text-center py-4" >

@@ -17,4 +17,4 @@ use Illuminate\Support\Facades\Route;
 
 
 
-Route::resource('/produits', ProductController::class);
+Route::resource('/', ProductController::class);

@@ -4,27 +4,23 @@ namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 
-class StagiaireController extends Controller
+class CollectionController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-
     public function index()
     {
-        $stagiaires = DB::table('stagiaires')->get();
-        return view('index', ['stagiaires' => $stagiaires]);
+        //
     }
-    
 
     /**
      * Show the form for creating a new resource.
      */
     public function create()
     {
-     
+        //
     }
 
     /**
@@ -32,18 +28,8 @@ class StagiaireController extends Controller
      */
     public function store(Request $request)
     {
-        $data = $request->validate([
-        'name' => 'required|string',
-        'prenom' => 'required|string',
-        'classe' => 'required|string',
-        'email' => 'required|email',
-    ]);
-
-    DB::table('stagiaires')->insert($data);
-
-    return redirect()->route('stagiaires.index')->with('success', 'Stagiaire added successfully!');
+        //
     }
-
 
     /**
      * Display the specified resource.

@@ -2,93 +2,76 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\ProduitsStoreRequest;
+
 use Illuminate\Http\Request;
-use Illuminate\Validation\Rules\Unique;
+use App\Models\Product;
 
 class ProductController extends Controller
 {
-  
+
     public function index()
-    {   
-        $produits = session('produits',[]); 
-        return view('produits.index',['produits'=>$produits]);
+    {
+        $product = Product::all();
+        return view('product.index', compact('product'));
     }
 
     public function create()
     {
- 
-        return view('produits.create');
+        return view('product.create');
     }
 
-    public function store(ProduitsStoreRequest $request)
+    public function store(Request $request)
     {
-        $produits = session('produits',[]);
-        array_push($produits,[
-            'Id'=>uniqid(),
+        $request->validate([
+            'Libelle' => 'required|string',
+            'Marque' => 'required',
+            'Prix' => 'required|numeric',
+            'Stock' => 'required|integer|min:1|max:5000',
+            'Image' => 'nullable|file',
+        ]);
+    }
+
+    public function show(Product $product)
+    {
+        return view('product.show', compact('product'));
+    }
+
+    public function edit(Product $product)
+    {
+        return view('product.edit', compact('product'));
+    }
+
+    public function update(ProduitsStoreRequest $request,  $id)
+    {
+        $product = session('product',[]);
+        foreach($product as $key => $produit){
+             if($produit['Id']==$id){
+
+        $produits[$key]=[
+                     'Id'=>$id,
             'Libelle' => $request->libelle,
             'Marque' => $request->marque,
             'Prix' => $request->prix,
             'Stock' => $request->stock,
             'Image' => $request->file('image')->store('ProduitsImages','local'),
-        ]);
-        session(['produits' => $produits]);
-        
-        return redirect('/produits');
-    }
-
-    public function show( $id)
-    {
-        $produits=session('produits',[]);
-        foreach($produits as $produit){
-             if($produit['Id']==$id){
-                $infoproduit=$produit;
-                return view("produits.show",['id'=>$id,'produit'=>$infoproduit]);
-             }
-             
-            }
-            return view('produits.error');
-    }
-
-    public function edit(string $id)
-    {
-        $produits = session('produits',[]); 
-        return view('produits.edit',compact('produits','id'));
-    }
-
-    public function update(ProduitsStoreRequest $request,  $id)
-    {
-        $produits = session('produits',[]);
-        foreach($produits as $key => $produit){
-             if($produit['Id']==$id){
-
-                 $produits[$key]=[
-                     'Id'=>$id,
-                     'Libelle' => $request->libelle,
-                     'Marque' => $request->marque,
-                     'Prix' => $request->prix,
-                     'Stock' => $request->stock,
-                     'Image' => $request->file('image')->store('ProduitsImages','local'),
                  ];
              }
         }
-        session(['produits' => $produits]);
-        return redirect('/produits');
     }
 
     public function destroy( $id)
     {
-       $produits = session('produits', []);
+       $product = session('product', []);
 
-        foreach ($produits as $key => $produit) {
+        foreach ($product as $key => $produit) {
             if ($produit['Id'] == $id) {
-                unset($produits[$key]);
+                unset($product[$key]);
                 break;
             }
         }
         
 
-        session(['produits'=>$produits]);
-        return redirect('/produits');
+        session(['produits'=>$product]);
+        return redirect('/product');
     }
 }

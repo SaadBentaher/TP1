@@ -2,29 +2,37 @@
 
 namespace App\Models;
 
-// use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Foundation\Auth\User as Authenticatable;
-use Illuminate\Notifications\Notifiable;
-use Laravel\Sanctum\HasApiTokens;
+use Illuminate\Database\Eloquent\Model;
 
-class User extends Authenticatable
+class Product extends Model
 {
-    use HasApiTokens, HasFactory, Notifiable;
+    use HasFactory;
 
     protected $fillable = [
-        'name',
-        'email',
-        'password',
+        'Libelle', 'Marque', 'Prix', 'Stock', 'Image',
     ];
 
-    protected $hidden = [
-        'password',
-        'remember_token',
+    public static $rules = [
+        'Libelle' => 'required|string',
+        'Marque' => 'required',
+        'Prix' => 'required|numeric',
+        'Stock' => 'required|integer|min:1|max:9999',
+        'Image' => 'nullable|file',
     ];
 
-    protected $casts = [
-        'email_verified_at' => 'datetime',
-        'password' => 'hashed',
+    public static $messages = [
+        'required' => 'Le champ :attribute est obligatoire.',
+        'string' => 'Le champ :attribute doit être une chaîne de caractères.',
+        'numeric' => 'Le champ :attribute doit être un nombre.',
+        'integer' => 'Le champ :attribute doit être un entier.',
+        'min' => 'Le champ :attribute doit être supérieur ou égal à :min.',
+        'max' => 'Le champ :attribute doit être inférieur ou égal à :max.',
+        'file' => 'Le champ :attribute doit être un fichier.',
     ];
+
+    public function validate($data)
+    {
+        return validator($data, static::$rules, static::$messages);
+    }
 }
